@@ -27,5 +27,5 @@ export class Car {
   year: number;
 
   @ManyToMany(() => User, (user) => user.cars)
-  users: User[];
+  users: Promise<User[]>;
 }

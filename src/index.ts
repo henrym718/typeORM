@@ -23,22 +23,26 @@ AppDataSource.initialize().then(async (cnn) => {
   user1.age = 15;
   user1.email = "anita@gddmail.com";
   user1.password = "12345";
-  user1.cars = [car1, car2];
+  user1.cars = Promise.resolve([car1, car2]);
 
   const user2 = new User();
   user2.name = "Henry Mosquera";
   user2.age = 15;
   user2.email = "henry@gddmail.com";
   user2.password = "12345";
-  user2.cars = [car2];
+  user2.cars = Promise.resolve([car2]);
 
   // await carRepository.save(car1);
   // await carRepository.save(car2);
   // await userRepository.save(user1);
   // await userRepository.save(user2);
-  const users = await userRepository.find({ relations: ["cars"] });
+  const users = await userRepository.findOne({ where: { id: 6 } });
   console.log(users);
 
-  const cars = await carRepository.find({ relations: ["users"] });
+  //LazyLoad
+  const cars = await users.cars;
   console.log(cars);
+
+  // const cars = await carRepository.find({ relations: ["users"] });
+  // console.log(cars);
 });

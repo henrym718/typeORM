@@ -31,5 +31,5 @@ export class User {
 
   @ManyToMany(() => Car, (car) => car.users)
   @JoinTable()
-  cars: Car[];
+  cars: Promise<Car[]>;
 }
