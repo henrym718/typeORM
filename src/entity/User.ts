@@ -1,13 +1,33 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Car } from "./Car";
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "varchar", length: 50, nullable: true })
   name: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, unique: true })
   email: string;
+
+  @Column({ type: "int" })
+  age: number;
+
+  @Column({ type: "boolean", default: true })
+  active: boolean;
+
+  @Column({ type: "varchar", length: 20 })
+  password: string;
+
+  @OneToMany(() => Car, (car) => car.user)
+  @JoinColumn()
+  cars: Car[];
 }
