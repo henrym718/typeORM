@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -25,6 +26,6 @@ export class Car {
   @Column({ type: "int" })
   year: number;
 
-  @ManyToOne(() => User, (user) => user.cars)
-  user: User;
+  @ManyToMany(() => User, (user) => user.cars)
+  users: User[];
 }

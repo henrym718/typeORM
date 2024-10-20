@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -27,7 +29,7 @@ export class User {
   @Column({ type: "varchar", length: 20 })
   password: string;
 
-  @OneToMany(() => Car, (car) => car.user)
-  @JoinColumn()
+  @ManyToMany(() => Car, (car) => car.users)
+  @JoinTable()
   cars: Car[];
 }
