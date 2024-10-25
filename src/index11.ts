@@ -9,9 +9,19 @@ AppDataSource.initialize().then(async (cnn) => {
     .createQueryBuilder()
     .from(Car, "car")
     .select("car.id, car.model")
-    .where("car.id in (:...ids)")
-    .setParameters({ ids: [1, 2] })
+    .where("car.id >=:idMin and car.id <=:idMax")
+    .setParameters({ idMin: 5, idMax: 8 })
     .getRawMany();
 
   console.log(carsRabge);
+
+  const carsRabge_1 = await manager
+    .createQueryBuilder()
+    .from(Car, "car")
+    .select("car.id, car.model")
+    .where("car.id >=:idMin")
+    .andWhere("car.id <=:idMax")
+    .setParameters({ idMin: 5, idMax: 8 })
+    .getRawMany();
+  console.log(carsRabge_1);
 });

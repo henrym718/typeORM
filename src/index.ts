@@ -1,27 +1,28 @@
+import { Brackets } from "typeorm";
 import { AppDataSource } from "./data-source";
 import { Car } from "./entity/Car";
 import { User } from "./entity/User";
 
 AppDataSource.initialize().then(async (cnn) => {
   const manager = cnn.manager;
-
-  const carsRabge = await manager
+  const cars = await manager
     .createQueryBuilder()
-    .from(Car, "car")
-    .select("car.id, car.model")
-    .where("car.id >=:idMin and car.id <=:idMax")
-    .setParameters({ idMin: 5, idMax: 8 })
+    .from(User, "user")
+    .select(["user.id", "user.name", "user.age", "user.active"])
+    .where(
+      new Brackets((qb) => {
+        qb.where("user.age between :nMin and :nMax", {
+          nMin: 15,
+          nMax: 20,
+        }).andWhere("user.active = :bol", { bol: false });
+      })
+    )
+    .andWhere(
+      new Brackets((qb) => {
+        qb.where("user.name like :name", { name: "%Mosq%" });
+      })
+    )
     .getRawMany();
 
-  console.log(carsRabge);
-
-  const carsRabge_1 = await manager
-    .createQueryBuilder()
-    .from(Car, "car")
-    .select("car.id, car.model")
-    .where("car.id >=:idMin")
-    .andWhere("car.id <=:idMax")
-    .setParameters({ idMin: 5, idMax: 8 })
-    .getRawMany();
-  console.log(carsRabge_1);
+  console.log(cars);
 });
