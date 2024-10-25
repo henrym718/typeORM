@@ -10,6 +10,6 @@ export const AppDataSource = new DataSource({
   username: "henry",
   password: "12345",
   entities: [User, Car],
-  logging: true,
+  logging: false,
   synchronize: true,
 });
