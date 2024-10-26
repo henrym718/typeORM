@@ -4,7 +4,7 @@ import { Car } from "./entity/Car";
 import { User } from "./entity/User";
 
 AppDataSource.initialize().then(async (cnn) => {
-  const manager = cnn.manager;
+  const manager = AppDataSource.manager;
 
   // const sumAgeUsers = await manager
   //   .createQueryBuilder()
