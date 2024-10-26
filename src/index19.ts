@@ -2,16 +2,14 @@ import { Brackets } from "typeorm";
 import { AppDataSource } from "./data-source";
 import { Car } from "./entity/Car";
 import { User } from "./entity/User";
-import { UnitOfWork } from "./unittowork/unitofwork";
 
 AppDataSource.initialize().then(async (cnn) => {
-  const unitOfWork = new UnitOfWork(cnn);
+  const queryRunner = cnn.createQueryRunner();
 
-  await unitOfWork.start();
-
-  const work = async () => {
-    const manager = unitOfWork.getManager();
-    await manager
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+  try {
+    await queryRunner.manager
       .createQueryBuilder()
       .insert()
       .into(Car)
@@ -23,7 +21,7 @@ AppDataSource.initialize().then(async (cnn) => {
       })
       .execute();
 
-    await manager
+    await queryRunner.manager
       .createQueryBuilder()
       .insert()
       .into(User)
@@ -34,7 +32,13 @@ AppDataSource.initialize().then(async (cnn) => {
         password: "12345",
       })
       .execute();
-  };
 
-  await unitOfWork.transaction(work);
+    await queryRunner.commitTransaction();
+    console.log("Transaccion con exito");
+  } catch (error) {
+    await queryRunner.rollbackTransaction();
+    console.log("Transaccion fallida");
+  } finally {
+    await queryRunner.release();
+  }
 });

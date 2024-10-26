@@ -32,10 +32,10 @@ AppDataSource.initialize().then(async (cnn) => {
   user2.password = "12345";
   user2.cars = Promise.resolve([car2]);
 
-  // await carRepository.save(car1);
-  // await carRepository.save(car2);
-  // await userRepository.save(user1);
-  // await userRepository.save(user2);
+  await carRepository.save(car1);
+  await carRepository.save(car2);
+  await userRepository.save(user1);
+  await userRepository.save(user2);
 
   const users = await userRepository.findOne({ where: { id: 3 } });
   console.log(users);
