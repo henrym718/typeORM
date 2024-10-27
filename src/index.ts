@@ -5,16 +5,12 @@ import { User } from "./entity/User";
 import { UnitOfWork } from "./unittowork/unitofwork";
 
 AppDataSource.initialize().then(async (cnn) => {
-  const cars = await AppDataSource.createQueryBuilder()
-    .select("car")
-    .from(Car, "car")
-    .getMany();
-
-  const timber = await AppDataSource.createQueryBuilder()
-    .select("user")
+  const usersInnerjoi = await cnn
+    .createQueryBuilder()
+    .select(["user.id", "user.name", "car.model"])
     .from(User, "user")
-    .where("user.id = :id OR user.name = :name", { id: 12, name: "Timber" })
-    .getOne();
+    .innerJoin("user.cars", "carclear")
+    .getRawMany();
 
-  console.log(timber);
+  console.log(usersInnerjoi);
 });

@@ -3,8 +3,7 @@ import { Car } from "./entity/Car";
 import { User } from "./entity/User";
 
 AppDataSource.initialize().then(async (cnn) => {
-  const carRepository = cnn.getRepository(Car);
-  const userRepository = cnn.getRepository(User);
+  const manager = cnn.manager;
 
   const car1 = new Car();
   car1.brand = "Otro modelo 1";
@@ -32,12 +31,12 @@ AppDataSource.initialize().then(async (cnn) => {
   user2.password = "12345";
   user2.cars = Promise.resolve([car2]);
 
-  await carRepository.save(car1);
-  await carRepository.save(car2);
-  await userRepository.save(user1);
-  await userRepository.save(user2);
+  // await manager.save(car1);
+  // await manager.save(car2);
+  // await manager.save(user1);
+  // await manager.save(user2);
 
-  const users = await userRepository.findOne({ where: { id: 3 } });
+  const users = await manager.findOne(User, { where: { id: 1 } });
   console.log(users);
 
   //LazyLoad
